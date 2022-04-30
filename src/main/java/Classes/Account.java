@@ -3,6 +3,7 @@ package Classes;
 import Enums.Industry;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Account {
     private String id;
@@ -12,14 +13,15 @@ public class Account {
     private String country;
     private List<Contact> contactList;
     private List<Opportunity> opportunityList;
-    //Lead's company name?
+    private static AtomicInteger accountIdCounter = new AtomicInteger();
+    // Should Account have Lead's company name and be added to constructor?
 
 
 
 
     //CONSTRUCTOR
-    public Account(String id, Industry industry, int employeeCount, String city, String country, List<Contact> contactList, List<Opportunity> opportunityList) {
-        this.id = id;
+    public Account(Industry industry, int employeeCount, String city, String country, List<Contact> contactList, List<Opportunity> opportunityList) {
+        id = createID();
         this.industry = industry;
         this.employeeCount = employeeCount;
         this.city = city;
@@ -31,10 +33,6 @@ public class Account {
 
 
     //SETTERS
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void setIndustry(Industry industry) {
         this.industry = industry;
     }
@@ -94,6 +92,8 @@ public class Account {
 
 
     //METHODS
-
+    public static String createID() {
+        return String.valueOf(accountIdCounter.getAndIncrement() + 1);
+    }
 
 }
