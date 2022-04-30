@@ -1,18 +1,24 @@
 package Classes;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
+
+
 public class Lead {
     private String id;
     private String name;
     private int phoneNumber;
     private String email;
     private String companyName;
+    private static AtomicInteger leadIdCounter = new AtomicInteger();
+
 
 
 
 
     //CONSTRUCTOR
-    public Lead(String id, String name, int phoneNumber, String email, String companyName) {
-        this.id = id;
+    public Lead(String name, int phoneNumber, String email, String companyName) {
+        id = createID();
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -23,9 +29,6 @@ public class Lead {
 
 
     //SETTERS
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -48,9 +51,7 @@ public class Lead {
 
 
     //GETTERS
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
     public String getName() {
         return name;
@@ -72,6 +73,9 @@ public class Lead {
 
 
     //METHODS
+    public static String createID() {
+        return String.valueOf(leadIdCounter.getAndIncrement() + 1);
+    }
 
 
 

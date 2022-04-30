@@ -3,17 +3,20 @@ package Classes;
 import Enums.Product;
 import Enums.Status;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Opportunity {
     private String id;
     private Product product;
     private Contact decisionMaker;
     private Status status;
+    private static AtomicInteger opportunityIdCounter = new AtomicInteger();
 
 
 
     //CONSTRUCTOR
-    public Opportunity(String id, Product product, Contact decisionMaker, Status status) {
-        this.id = id;
+    public Opportunity(Product product, Contact decisionMaker, Status status) {
+        id = createID();
         this.product = product;
         this.decisionMaker = decisionMaker;
         this.status = status;
@@ -23,9 +26,6 @@ public class Opportunity {
 
 
     //SETTERS
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public void setProduct(Product product) {
         this.product = product;
@@ -61,7 +61,9 @@ public class Opportunity {
 
 
     //METHODS
-
+    public static String createID() {
+        return String.valueOf(opportunityIdCounter.getAndIncrement() + 1);
+    }
 
 
 
