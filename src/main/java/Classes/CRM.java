@@ -24,9 +24,19 @@ public class CRM {
                 "\nPlease type another command");
     }
 
-    public void showLead() {
+    public void showLeads() {
         for (int i = 0; i < leadList.size(); i++) {
             System.out.println(leadList.get(i).toString());
+        }
+    }
+
+    public void lookupLeadId(Scanner scanner){
+        String id = scanner.nextLine();
+        for(int i = 0; i < leadList.size(); i++){
+            if(id.equals(leadList.get(i).getId())){
+                System.out.println(leadList.get(i).toString());
+            }
+
         }
     }
 

@@ -18,7 +18,7 @@ public class Lead {
 
     //CONSTRUCTOR
     public Lead(String name, int phoneNumber, String email, String companyName) {
-        id = createID();
+        id = createId();
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -73,7 +73,7 @@ public class Lead {
 
 
     //METHODS
-    public static String createID() {
+    public static String createId() {
         return String.valueOf(leadIdCounter.getAndIncrement() + 1);
     }
 
