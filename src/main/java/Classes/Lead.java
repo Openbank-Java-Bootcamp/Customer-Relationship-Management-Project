@@ -77,7 +77,12 @@ public class Lead {
         return String.valueOf(leadIdCounter.getAndIncrement() + 1);
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "Lead (id " + id + ") has these details: " +
+                "name: " + name +
+                ", phoneNumber: " + phoneNumber +
+                ", email: " + email +
+                ", companyName: " + companyName;
+    }
 }
