@@ -25,6 +25,9 @@ public class Lead {
         this.companyName = companyName;
     }
 
+    // only used to create a null Lead for testing purposes
+    public Lead() {}
+
 
 
 
@@ -75,6 +78,10 @@ public class Lead {
     //METHODS
     public static String createId() {
         return String.valueOf(leadIdCounter.getAndIncrement() + 1);
+    }
+
+    public void setIdToNull() {
+        this.id = null;
     }
 
     @Override
