@@ -86,10 +86,10 @@ public class Lead {
 
     @Override
     public String toString() {
-        return "Lead (id " + id + ") has these details: " +
-                "name: " + name +
-                ", phoneNumber: " + phoneNumber +
-                ", email: " + email +
-                ", companyName: " + companyName;
+        return "\nLead " + id + " has these details:" +
+                "\nName: " + name +
+                "\nPhone Number: " + phoneNumber +
+                "\nEmail: " + email +
+                "\nCompany Name: " + companyName + "\n\n";
     }
 }
