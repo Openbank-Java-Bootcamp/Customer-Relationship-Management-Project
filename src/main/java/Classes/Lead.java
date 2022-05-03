@@ -25,7 +25,8 @@ public class Lead {
         this.companyName = companyName;
     }
 
-
+    // only used to create a null Lead for testing purposes
+    public Lead() {}
 
 
     //SETTERS
@@ -44,6 +45,10 @@ public class Lead {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public void setIdToNull() {
+        this.id = null;
     }
 
 
