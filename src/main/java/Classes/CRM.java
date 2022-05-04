@@ -109,8 +109,16 @@ public class CRM {
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
             } else if (userChoice.contains("CLOSE-WON")) { //did not try yet
+                String closeWonId = userChoice.split(" ")[1];
+                closeOpportunity(closeWonId, Status.CLOSED_WON);
+                System.out.println(menuOptions);
+                userChoice = scanner.nextLine().toUpperCase();
                 //method to close opportunity and change status to won
-            } else if (userChoice.contains("CLOSE-LOST")) { //did not try yet
+            } else if (userChoice.contains("CLOSE-LOST")) { //did not try
+                String closeLostId = userChoice.split(" ")[1];
+                closeOpportunity(closeLostId, Status.CLOSED_LOST);
+                System.out.println(menuOptions);
+                userChoice = scanner.nextLine().toUpperCase();
                 //method to close opportunity and change status to lost
             } else if (userChoice.equals("EXIT")) {
                 break;
@@ -186,6 +194,14 @@ public class CRM {
         List<Opportunity> newOpportunityList = Arrays.asList(newOpportunity);
         Account newAccount = new Account(industryType, employeeCount, city, country, newContactList, newOpportunityList);
         accountList.put(newAccount.getId(),newAccount);
+    }
+
+    public void closeOpportunity(String id, Status status){
+        if (opportunityList.get(id) == null) {
+            throw new IllegalArgumentException("Not a valid Opportunity ID");
+        }
+        opportunityList.get(id).setStatus(status);
+
     }
     public static int verifyIntInput(Scanner scanner, int min, int max) {
         boolean flag;
