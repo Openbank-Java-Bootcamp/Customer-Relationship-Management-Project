@@ -10,6 +10,7 @@ class CRMTest {
     private Lead empty_lead;
     private CRM test_crm;
     private Contact contact1;
+    private Lead lead2;
 
 
     @BeforeEach
@@ -18,7 +19,7 @@ class CRMTest {
         lead1 = new Lead("John Smith", 123456789, "jsmith@example.com", "Company A");
         test_crm.leadList.put(lead1.getId(), lead1);
         //empty_lead = new Lead("", 0, "", "");
-        empty_lead = new Lead();
+        empty_lead = new Lead(leadsName, leadsPhoneNumberAsInt, leadsEmail, leadsCompany);
     }
 
     @Test
@@ -60,6 +61,18 @@ class CRMTest {
     @Test
     void deleteLead_invalidLead_Throws() {
         assertThrows(IllegalArgumentException.class, () -> test_crm.deleteLead(empty_lead));
+    }
+
+    @Test
+    void createLead_goodData_Works(){
+        String newLead1 = lead2.getId();
+        contact1 = test_crm.createContact(lead1);
+        //info matches
+        assertEquals("John Smith", contact1.getName());
+        assertEquals(123456789, contact1.getPhoneNumber());
+        assertEquals("jsmith@example.com", contact1.getEmail());
+        //lead deleted
+        assertThrows(IllegalArgumentException.class, () -> test_crm.lookupLead(newLead1));
     }
 
 

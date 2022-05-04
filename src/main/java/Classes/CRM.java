@@ -3,7 +3,7 @@ package Classes;
 import java.util.*;
 
 public class CRM {
-    public Map<String,Lead> leadList = new HashMap();
+    public Map<String, Lead> leadList = new HashMap();
     private List<Contact> contactList = new ArrayList<>();
 
     private static String menuOptions = "Enter NEW LEAD to create a new Lead.\n" +
@@ -17,25 +17,62 @@ public class CRM {
     public CRM() {
     }
 
-    public void createLead(Scanner scanner) {
-        System.out.println("Please type Lead's name");
-        String leadsName = scanner.nextLine();
-        System.out.println("Please type Lead's phone number");
-        String leadsPhoneNumberAsString = scanner.nextLine();
-        int leadsPhoneNumberAsInt = Integer.parseInt(leadsPhoneNumberAsString);
-        System.out.println("Please type Lead's email");
-        String leadsEmail = scanner.nextLine();
-        System.out.println("Please type Lead's company's name");
-        String leadsCompany = scanner.nextLine();
+    public void createLead(Scanner scanner) throws IllegalArgumentException {
+        String[] questions = {"Please type Lead's name", "Please type Lead's phone number", "Please type Lead's email", "Please type Lead's company's name"};
+        String[] answers = new String[4];
+        Boolean nextQuestion = true;
+        int i = 0;
+
+        while (nextQuestion && i < questions.length) {
+            Boolean keepAskingSameQuestion = true;
+            while (keepAskingSameQuestion) {
+                try {
+                    System.out.println(questions[i]);
+                    String userInput = scanner.nextLine();
+                    if (userInput.isEmpty()) {
+                        throw new IllegalArgumentException("Input cannot be empty");
+                    }
+                    answers[i] = userInput;
+                    System.out.println("Hi! " + userInput);
+                    nextQuestion = true;
+                    keepAskingSameQuestion = false;
+                    i++;
+                } catch (IllegalArgumentException e) {
+                    keepAskingSameQuestion = true;
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+        String leadsName = answers[0];
+        System.out.println("Name : " + leadsName);
+        String leadsPhoneNumberAsInt = answers[1];
+        System.out.println("Phone number : " + leadsPhoneNumberAsInt);
+        String leadsEmail = answers[2];
+        System.out.println("Email address : " + leadsEmail);
+        String leadsCompany = answers[3];
+        System.out.println("Company Name : " + leadsCompany);
+
         Lead newLead = new Lead(leadsName, leadsPhoneNumberAsInt, leadsEmail, leadsCompany);
-        //leadList.add(newLead);
+        /*leadList.put(newLead);*/
         leadList.put(newLead.getId(), newLead);
-        //System.out.println("Operation successful, Lead is created and added to the Lead's list" + "\nPlease type another command");
+        System.out.println("Operation successful, Lead is created and added to the Lead's list" + "\nPlease type another command");
         System.out.println(newLead.toString());
     }
 
+
+        /*Lead newLead = new Lead(leadsName, leadsPhoneNumberAsInt, leadsEmail, leadsCompany);*/
+        //leadList.add(newLead);
+        /*leadList.put(newLead.getId(), newLead);*/
+        //System.out.println("Operation successful, Lead is created and added to the Lead's list" + "\nPlease type another command");
+        /*System.out.println(newLead.toString());*/
+
+
+
+
     public void showLeads() {
         for (int i = 0; i < leadList.size(); i++) {
+           /* throw new IllegalArgumentException("Not a valid Lead ID");*/
             System.out.println(leadList.get(i).toString());
         }
     }

@@ -26,7 +26,7 @@ public class Lead {
     }
 
     // only used to create a null Lead for testing purposes
-    public Lead() {}
+    public Lead(String leadsName, String leadsPhoneNumberAsInt, String leadsEmail, String leadsCompany) {}
 
 
 
