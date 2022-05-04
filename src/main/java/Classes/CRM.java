@@ -9,8 +9,9 @@ import java.util.*;
 public class CRM {
     public Map<String,Lead> leadList = new HashMap();
     private List<Contact> contactList = new ArrayList<>();
-    public Map<String,Opportunity> opportunityList = new HashMap<>();
-    public Map<String,Account> accountList = new HashMap<>();
+    private Map<String,Opportunity> opportunityList = new HashMap<>();
+    private Map<String,Account> accountList = new HashMap<>();
+
 
     private static String menuOptions = "Enter NEW LEAD to create a new Lead.\n" +
             "Enter SHOW LEADS to see all Leads.\n" +
@@ -126,7 +127,7 @@ public class CRM {
     public void convertLead(Scanner scanner, String id){
         Contact newContact = createContact(leadList.get(id));
         Product productType = typeOfProduct(scanner);
-        Opportunity newOpportunity = createOportunity(productType, newContact);
+        Opportunity newOpportunity = createOpportunity(productType, newContact);
         createAccount(scanner, newContact, newOpportunity);
     }
 
@@ -168,7 +169,7 @@ public class CRM {
                 return Industry.OTHER;
         }
     }
-    public Opportunity createOportunity(Product productType, Contact newContact){
+    public Opportunity createOpportunity(Product productType, Contact newContact){
         Opportunity newOpportunity = new Opportunity(productType, newContact, Status.OPEN);
         opportunityList.put(newOpportunity.getId(), newOpportunity);
         return newOpportunity;
@@ -181,7 +182,9 @@ public class CRM {
         String city = scanner.nextLine();
         System.out.println("Please type Account country");
         String country = scanner.nextLine();
-        Account newAccount = new Account(industryType, employeeCount, city, country, newContact, newOpportunity); //Only one opportunity for each contact??
+        List<Contact> newContactList = Arrays.asList(newContact);
+        List<Opportunity> newOpportunityList = Arrays.asList(newOpportunity);
+        Account newAccount = new Account(industryType, employeeCount, city, country, newContactList, newOpportunityList);
         accountList.put(newAccount.getId(),newAccount);
     }
     public static int verifyIntInput(Scanner scanner, int min, int max) {
