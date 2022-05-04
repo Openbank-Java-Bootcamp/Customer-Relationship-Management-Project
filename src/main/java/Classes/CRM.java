@@ -1,10 +1,16 @@
 package Classes;
 
+import Enums.Industry;
+import Enums.Product;
+import Enums.Status;
+
 import java.util.*;
 
 public class CRM {
     public Map<String,Lead> leadList = new HashMap();
     private List<Contact> contactList = new ArrayList<>();
+    public Map<String,Opportunity> opportunityList = new HashMap<>();
+    public Map<String,Account> accountList = new HashMap<>();
 
     private static String menuOptions = "Enter NEW LEAD to create a new Lead.\n" +
             "Enter SHOW LEADS to see all Leads.\n" +
@@ -63,6 +69,8 @@ public class CRM {
         return newContact;
     }
 
+
+
     //can't delete a Lead object, but can set all info to null
     public void deleteLead(Lead lead) {
         if (lead.getName() == null) {
@@ -96,8 +104,7 @@ public class CRM {
                 userChoice = scanner.nextLine().toUpperCase();
             } else if (userChoice.contains("CONVERT")) {  //did not try yet
                 String lead_id = userChoice.split(" ")[1];
-                Lead lead = leadList.get(lead_id);
-                createContact(lead);
+                convertLead(scanner, lead_id);
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
             } else if (userChoice.contains("CLOSE-WON")) { //did not try yet
@@ -113,9 +120,91 @@ public class CRM {
             }
         }
     }
-    
 
 
 
+    public void convertLead(Scanner scanner, String id){
+        Contact newContact = createContact(leadList.get(id));
+        Product productType = typeOfProduct(scanner);
+        Opportunity newOpportunity = createOportunity(productType, newContact);
+        createAccount(scanner, newContact, newOpportunity);
+    }
+
+    public Product typeOfProduct(Scanner scanner){
+        System.out.println(
+                "Enter (1) for the product: Hybrid" +
+                        "\nEnter (2) for the product: Flatbed" +
+                        "\nEnter (3) for the product: Box"
+        );
+        int productChoice = CRM.verifyIntInput(scanner, 1, 3);
+        switch(productChoice){
+            case 1:
+                return Product.HYBRID;
+            case 2:
+                return Product.FLATBED;
+            default:
+                return Product.BOX;
+        }
+    }
+    public Industry typeOfIndustry(Scanner scanner){
+        System.out.println(
+                "Enter (1) for the industry: produce" +
+                        "\nEnter (2) for the product: ecommerce" +
+                        "\nEnter (3) for the product: manufacturing"+
+                        "\nEnter (4) for the product: medical"+
+                        "\nEnter (5) for the product: other"
+        );
+        int productChoice = CRM.verifyIntInput(scanner, 1, 5);
+        switch(productChoice){
+            case 1:
+                return Industry.PRODUCE;
+            case 2:
+                return Industry.ECOMMERCE;
+            case 3:
+                return Industry.MANUFACTURING;
+            case 4:
+                return Industry.MEDICAL;
+            default:
+                return Industry.OTHER;
+        }
+    }
+    public Opportunity createOportunity(Product productType, Contact newContact){
+        Opportunity newOpportunity = new Opportunity(productType, newContact, Status.OPEN);
+        opportunityList.put(newOpportunity.getId(), newOpportunity);
+        return newOpportunity;
+    }
+    public void createAccount(Scanner scanner, Contact newContact, Opportunity newOpportunity){
+        Industry industryType = typeOfIndustry(scanner);
+        System.out.println("Please type the number of employees");
+        int employeeCount = CRM.verifyIntInput(scanner, 1, Integer.MAX_VALUE);
+        System.out.println("Please type Account city");
+        String city = scanner.nextLine();
+        System.out.println("Please type Account country");
+        String country = scanner.nextLine();
+        Account newAccount = new Account(industryType, employeeCount, city, country, newContact, newOpportunity); //Only one opportunity for each contact??
+        accountList.put(newAccount.getId(),newAccount);
+    }
+    public static int verifyIntInput(Scanner scanner, int min, int max) {
+        boolean flag;
+        int num = -1;
+        String input;
+        do { input = scanner.next();
+            try {
+                Integer.parseInt(input);
+                flag = false;
+            } catch (NumberFormatException e) {
+                System.err.println("Enter a number " + min + "-" + max);
+                flag = true;
+            }
+            if (!flag) {
+                num = Integer.parseInt(input);
+                if (num > max || num < min) {
+                    System.err.println("Enter a number " + min + "-" + max);
+                    flag = true;
+                }
+            }
+        } while (flag);
+        return num;
+    }
 
 }
