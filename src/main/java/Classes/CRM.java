@@ -26,6 +26,42 @@ public class CRM {
     public CRM() {
     }
 
+    public void verifyName(String name) {
+        String regx = "[a-zA-Z]+\\.?";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Only letters and spaces allowed");
+        }
+    }
+
+    public void verifyPhone(String phone) {
+        String regx = "^[0-9]{9}$";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(phone);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Phone number must be 9 digits.");
+        }
+    }
+
+    public void verifyEmail(String email) {
+        String regx = "^(.+)@(.+)$";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Not a valid email address.");
+        }
+    }
+
+    public void verifyCompany(String company) {
+        String regx = ".*\\S.*";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(company);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Invalid input");
+        }
+    }
+
     public void createLead(Scanner scanner) {
         String leadName = null;
         String leadPhone = null;
@@ -76,42 +112,6 @@ public class CRM {
         leadList.put(newLead.getId(), newLead);
         System.out.println("\n\nLead created:");
         System.out.println(newLead.toString());
-    }
-
-    public void verifyName(String name) {
-        String regx = "[a-zA-Z]+\\.?";
-        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(name);
-        if(!matcher.find()) {
-            throw new IllegalArgumentException("Only letters and spaces allowed");
-        }
-    }
-
-    public void verifyPhone(String phone) {
-        String regx = "^[0-9]{9}$";
-        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(phone);
-        if(!matcher.find()) {
-            throw new IllegalArgumentException("Phone number must be 9 digits.");
-        }
-    }
-
-    public void verifyEmail(String email) {
-        String regx = "^(.+)@(.+)$";
-        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        if(!matcher.find()) {
-            throw new IllegalArgumentException("Not a valid email address.");
-        }
-    }
-
-    public void verifyCompany(String company) {
-        String regx = ".*\\S.*";
-        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(company);
-        if(!matcher.find()) {
-            throw new IllegalArgumentException("Invalid input");
-        }
     }
 
     public void showLeads() {

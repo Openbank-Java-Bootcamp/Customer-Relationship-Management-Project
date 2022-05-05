@@ -1,7 +1,12 @@
 package Classes;
 
+import Enums.Industry;
+import Enums.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.StringReader;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,6 +56,53 @@ class CRMTest {
     @Test
     public void createContact_InvalidLead_IllegalArgumentException() {
         assertDoesNotThrow(() -> testCrm.createContact(emptyLead));
+    }
+
+    //Testings of methods used in convertId
+    //typeOfProduct
+
+    @Test
+    public void typeOfProduct_goodData_Works(){
+        Scanner testScan = new Scanner(new StringReader("1"));
+        assertEquals(Product.HYBRID, testCrm.typeOfProduct(testScan));
+    }
+
+    @Test
+    public void typeOfProduct_emptyProductChoice_IllegalArgumentException(){
+        Scanner testScan1 = new Scanner(new StringReader(" "));
+        assertThrows(java.util.NoSuchElementException.class, () -> testCrm.typeOfProduct(testScan1));
+    }
+
+    @Test
+    public void typeOfProduct_invalidProductChoice_IllegalArgumentException(){
+        Scanner testScan1 = new Scanner(new StringReader("5"));
+        Scanner testScan2 = new Scanner(new StringReader("-5"));
+        Scanner testScan3 = new Scanner(new StringReader("0"));
+        assertThrows(java.util.NoSuchElementException.class, () -> testCrm.typeOfProduct(testScan1));
+        assertThrows(java.util.NoSuchElementException.class, () -> testCrm.typeOfProduct(testScan2));
+        assertThrows(java.util.NoSuchElementException.class, () -> testCrm.typeOfProduct(testScan3));
+    }
+
+    @Test
+    public void typeOfIndustry_goodData_Works(){
+        Scanner testScan = new Scanner(new StringReader("3"));
+        assertEquals(Industry.MANUFACTURING, testCrm.typeOfIndustry(testScan));
+    }
+
+    @Test
+    public void typeOfIndustry_emptyProductChoice_IllegalArgumentException(){
+        Scanner testScan1 = new Scanner(new StringReader(" "));
+        assertThrows(java.util.NoSuchElementException.class, () -> testCrm.typeOfIndustry(testScan1));
+    }
+
+    @Test
+    public void typeOfIndustry_invalidProductChoice_IllegalArgumentException(){
+        Scanner testScan1 = new Scanner(new StringReader("10"));
+        Scanner testScan2 = new Scanner(new StringReader("-10"));
+        Scanner testScan3 = new Scanner(new StringReader("0"));
+        assertThrows(java.util.NoSuchElementException.class, () -> testCrm.typeOfIndustry(testScan1));
+        assertThrows(java.util.NoSuchElementException.class, () -> testCrm.typeOfIndustry(testScan2));
+        assertThrows(java.util.NoSuchElementException.class, () -> testCrm.typeOfIndustry(testScan3));
     }
 
     @Test
