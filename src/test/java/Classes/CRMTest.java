@@ -2,6 +2,7 @@ package Classes;
 
 import Enums.Industry;
 import Enums.Product;
+import Enums.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -76,19 +77,18 @@ class CRMTest {
         assertThrows(IllegalArgumentException.class, () -> test_crm.deleteLead(empty_lead));
     }
 
-    //Testings of methods used in convertId
-    //typeOfProduct
-
     @Test
     public void typeOfProduct_goodData_Works(){
         Scanner testScan = new Scanner(new StringReader("1"));
         assertEquals(Product.HYBRID, test_crm.typeOfProduct(testScan));
+        testScan.close();
     }
 
     @Test
     public void typeOfProduct_emptyProductChoice_IllegalArgumentException(){
         Scanner testScan1 = new Scanner(new StringReader(" "));
         assertThrows(java.util.NoSuchElementException.class, () -> test_crm.typeOfProduct(testScan1));
+        testScan1.close();
     }
 
     @Test
@@ -99,18 +99,23 @@ class CRMTest {
         assertThrows(java.util.NoSuchElementException.class, () -> test_crm.typeOfProduct(testScan1));
         assertThrows(java.util.NoSuchElementException.class, () -> test_crm.typeOfProduct(testScan2));
         assertThrows(java.util.NoSuchElementException.class, () -> test_crm.typeOfProduct(testScan3));
+        testScan1.close();
+        testScan2.close();
+        testScan3.close();
     }
 
     @Test
     public void typeOfIndustry_goodData_Works(){
         Scanner testScan = new Scanner(new StringReader("3"));
         assertEquals(Industry.MANUFACTURING, test_crm.typeOfIndustry(testScan));
+        testScan.close();
     }
 
     @Test
     public void typeOfIndustry_emptyProductChoice_IllegalArgumentException(){
         Scanner testScan1 = new Scanner(new StringReader(" "));
         assertThrows(java.util.NoSuchElementException.class, () -> test_crm.typeOfIndustry(testScan1));
+        testScan1.close();
     }
 
     @Test
@@ -121,6 +126,17 @@ class CRMTest {
         assertThrows(java.util.NoSuchElementException.class, () -> test_crm.typeOfIndustry(testScan1));
         assertThrows(java.util.NoSuchElementException.class, () -> test_crm.typeOfIndustry(testScan2));
         assertThrows(java.util.NoSuchElementException.class, () -> test_crm.typeOfIndustry(testScan3));
+        testScan1.close();
+        testScan2.close();
+        testScan3.close();
+    }
+
+    @Test
+    public void createOpportunity_productAndContactPassed_Works(){
+        Contact tryContact = new Contact("Ana", 123456789, "aaa@aaa.aa");
+        Product tryProduct = Product.HYBRID;;
+        Opportunity testOpportunity = test_crm.createOpportunity(tryProduct, tryContact);
+        assertEquals(Status.OPEN, testOpportunity.getStatus());
     }
 
 
