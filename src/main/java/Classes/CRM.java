@@ -16,9 +16,7 @@ public class CRM {
 
     public CRM() {
     }
-
-
-    public void createLead2(Scanner scanner) {
+    public void createLead(Scanner scanner) {
         String leadName = null;
         String leadPhone = null;
         String leadEmail = null;
