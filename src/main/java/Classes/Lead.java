@@ -86,7 +86,7 @@ public class Lead {
 
     @Override
     public String toString() {
-        return "\nLead " + id + " has these details:" +
+        return "\nLead " + id +
                 "\nName: " + name +
                 "\nPhone Number: " + phoneNumber +
                 "\nEmail: " + email +

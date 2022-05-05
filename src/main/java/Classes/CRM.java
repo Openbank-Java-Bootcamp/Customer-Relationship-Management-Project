@@ -7,13 +7,13 @@ import Enums.Status;
 import java.util.*;
 
 public class CRM {
-    public Map<String,Lead> leadList = new HashMap();
+    public Map<String,Lead> leadList = new HashMap<>();
     private List<Contact> contactList = new ArrayList<>();
     private Map<String,Opportunity> opportunityList = new HashMap<>();
     private Map<String,Account> accountList = new HashMap<>();
 
 
-    private static String menuOptions = "Enter NEW LEAD to create a new Lead.\n" +
+    private static String menuOptions = "\n\nEnter NEW LEAD to create a new Lead.\n" +
             "Enter SHOW LEADS to see all Leads.\n" +
             "Enter LOOKUP LEAD along with the Lead ID to see a particular lead.\n" +
             "Enter CONVERT along with the Lead ID to convert a lead to an opportunity.\n" +
@@ -35,9 +35,8 @@ public class CRM {
         System.out.println("Please type Lead's company's name");
         String leadsCompany = scanner.nextLine();
         Lead newLead = new Lead(leadsName, leadsPhoneNumberAsInt, leadsEmail, leadsCompany);
-        //leadList.add(newLead);
         leadList.put(newLead.getId(), newLead);
-        //System.out.println("Operation successful, Lead is created and added to the Lead's list" + "\nPlease type another command");
+        System.out.println("\n\nLead created:");
         System.out.println(newLead.toString());
     }
 
@@ -47,17 +46,21 @@ public class CRM {
         }
     }
 
-    public Lead lookupLead(String lead_id) {
-        if (leadList.get(lead_id) == null) {
-            throw new IllegalArgumentException("Not a valid Lead ID");
+    public Lead lookupLead(String userChoice) {
+        String lead_id = null;
+        try {
+            lead_id = userChoice.split(" ")[2];
+        } catch (ArrayIndexOutOfBoundsException e) {
+        }
+        try {
+            System.out.println(leadList.get(lead_id).toString());
+        } catch (NullPointerException e) {
+            System.err.println("Not a valid Lead Id.");
         }
         return leadList.get(lead_id);
     }
 
     public Contact createContact(Lead lead){
-        if (lead.getName() == null || lead.getPhoneNumber() == 0 || lead.getEmail() == null) {
-            throw new IllegalArgumentException("Not a valid Lead");
-        }
         String contactName = lead.getName();
         int contactNumber = lead.getPhoneNumber();
         String contactEmail = lead.getEmail();
@@ -69,8 +72,6 @@ public class CRM {
         deleteLead(lead);
         return newContact;
     }
-
-
 
     //can't delete a Lead object, but can set all info to null
     public void deleteLead(Lead lead) {
@@ -93,17 +94,15 @@ public class CRM {
                 createLead(scanner);
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
-            } else if (userChoice.contains("SHOW LEADS")) {  //did not try yet
+            } else if (userChoice.contains("SHOW LEADS")) {  //works
                 showLeads();
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
             } else if (userChoice.contains("LOOKUP LEAD")) {  //works
-                String lead_id = userChoice.split(" ")[2];
-                Lead lead = lookupLead(lead_id);
-                System.out.println(lead.toString());
+                lookupLead(userChoice);
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
-            } else if (userChoice.contains("CONVERT")) {  //did not try yet
+            } else if (userChoice.contains("CONVERT")) {  //works
                 String lead_id = userChoice.split(" ")[1];
                 convertLead(scanner, lead_id);
                 System.out.println(menuOptions);
@@ -113,13 +112,11 @@ public class CRM {
                 closeOpportunity(closeWonId, Status.CLOSED_WON);
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
-                //method to close opportunity and change status to won
             } else if (userChoice.contains("CLOSE-LOST")) { //did not try
                 String closeLostId = userChoice.split(" ")[1];
                 closeOpportunity(closeLostId, Status.CLOSED_LOST);
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
-                //method to close opportunity and change status to lost
             } else if (userChoice.equals("EXIT")) {
                 break;
             } else {
@@ -131,12 +128,12 @@ public class CRM {
     }
 
 
-
     public void convertLead(Scanner scanner, String id){
         Contact newContact = createContact(leadList.get(id));
         Product productType = typeOfProduct(scanner);
         Opportunity newOpportunity = createOpportunity(productType, newContact);
         createAccount(scanner, newContact, newOpportunity);
+        System.out.println("New Opportunity created:\n" + newOpportunity.toString());
     }
 
     public Product typeOfProduct(Scanner scanner){
