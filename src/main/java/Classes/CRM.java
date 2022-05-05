@@ -107,9 +107,6 @@ public class CRM {
         System.out.println(newLead.toString());
     }
 
-
-
-
     public void showLeads() {
         if (leadList.size() < 1) {
             System.out.println("\n\nNo leads to show\n\n");
