@@ -9,7 +9,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CRM {
+
+
+
     public Map<String,Lead> leadList = new HashMap<>();
+
     private List<Contact> contactList = new ArrayList<>();
     private Map<String,Opportunity> opportunityList = new HashMap<>();
     private Map<String,Account> accountList = new HashMap<>();
@@ -61,6 +65,7 @@ public class CRM {
             throw new IllegalArgumentException("Invalid input");
         }
     }
+
     public void createLead(Scanner scanner) {
         String leadName = null;
         String leadPhone = null;
