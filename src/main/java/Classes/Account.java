@@ -99,11 +99,11 @@ public class Account {
     @Override
     public String toString() {
         return "Account: " + id +
-                "Industry:  " + industry +
-                "Employee Count:  " + employeeCount +
-                "City: " + city +
-                "Country:  " + country +
-                "Contact List" + contactList +
-                "Opportunity List" + opportunityList;
+                "\nIndustry:  " + industry +
+                "\nEmployee Count:  " + employeeCount +
+                "\nCity: " + city +
+                "\nCountry:  " + country +
+                "\nContact List" + contactList +
+                "\nOpportunity List" + opportunityList;
     }
 }

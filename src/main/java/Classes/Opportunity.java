@@ -69,8 +69,8 @@ public class Opportunity {
     @Override
     public String toString() {
         return "Opportunity " + id +
-                "Product:  " + product +
-                "Decision Maker:  " + decisionMaker +
-                "Status:  " + status;
+                "\nProduct:  " + product +
+                "\nDecision Maker:  " + decisionMaker +
+                "\nStatus:  " + status;
     }
 }
