@@ -17,55 +17,58 @@ public class CRM {
     public CRM() {
     }
 
-    public void createLead(Scanner scanner) throws IllegalArgumentException {
-        String[] questions = {"Please type Lead's name", "Please type Lead's phone number", "Please type Lead's email", "Please type Lead's company's name"};
-        Object[] answers = new Object[4];
-        Boolean nextQuestion = true;
-        int i = 0;
 
-        while (nextQuestion && i < questions.length) {
-            Boolean keepAskingSameQuestion = true;
-            while (keepAskingSameQuestion) {
-                try {
-                    System.out.println(questions[i]);
-                    String userInput = scanner.nextLine();
-                    if (userInput.isEmpty()) {
-                        System.err.println("Input cannot be empty");
-                    }
-                    answers[i] = userInput;
-                    System.out.println("You added: " + userInput);
-                    nextQuestion = true;
-                    keepAskingSameQuestion = false;
-                    i++;
-                } catch (IllegalArgumentException e) {
-                    keepAskingSameQuestion = true;
-                    System.out.println(e.getMessage());
-                }
+    public void createLead2(Scanner scanner) {
+        String leadName = null;
+        String leadPhone = null;
+        String leadEmail = null;
+        String leadCompany = null;
+        while (leadName == null) {
+            try {
+                System.out.println("Please type Lead's name");
+                leadName = scanner.nextLine();
+                verifyName(leadName);
+            } catch (IllegalArgumentException e) {
+                leadName = null;
+                System.err.println("Only letters and spaces allowed");
             }
         }
-
-        Object leadsName = answers[0];
-        System.out.println("Name : " + leadsName);
-        Object leadsPhone = answers[1];
-        System.out.println("Phone number : " + leadsPhone);
-        Object leadsEmail = answers[2];
-        System.out.println("Email address : " + leadsEmail);
-        Object leadsCompany = answers[3];
-        System.out.println("Company Name : " + leadsCompany);
-
-        Lead newLead = new Lead((String) leadsName, (Integer) leadsPhone, (String) leadsEmail, (String) leadsCompany);
-        /*leadList.put(newLead);*/
+        while (leadPhone == null) {
+            try {
+                System.out.println("Please type Lead's phone number");
+                leadPhone = scanner.nextLine();
+                verifyPhone(leadPhone);
+            } catch (IllegalArgumentException e) {
+                leadPhone = null;
+                System.err.println("Phone number must be 9 digits.");
+            }
+        }
+        int leadPhoneAsInt = Integer.parseInt(leadPhone);
+        while (leadEmail == null) {
+            try {
+                System.out.println("Please type Lead's email");
+                leadEmail = scanner.nextLine();
+                verifyEmail(leadEmail);
+            } catch (IllegalArgumentException e) {
+                leadEmail = null;
+                System.err.println("Not a valid email address.");
+            }
+        }
+        while (leadCompany == null) {
+            try {
+                System.out.println("Please type Lead's company");
+                leadCompany = scanner.nextLine();
+                verifyCompany(leadCompany);
+            } catch (IllegalArgumentException e) {
+                leadCompany = null;
+                System.err.println("Invalid input");
+            }
+        }
+        Lead newLead = new Lead(leadName, leadPhoneAsInt, leadEmail, leadCompany);
         leadList.put(newLead.getId(), newLead);
-        System.out.println("Operation successful, Lead is created and added to the Lead's list" + "\nPlease type another command");
+        System.out.println("\n\nLead created:");
         System.out.println(newLead.toString());
     }
-
-
-    /*Lead newLead = new Lead(leadsName, leadsPhoneNumberAsInt, leadsEmail, leadsCompany);*/
-    //leadList.add(newLead);
-    /*leadList.put(newLead.getId(), newLead);*/
-    //System.out.println("Operation successful, Lead is created and added to the Lead's list" + "\nPlease type another command");
-    /*System.out.println(newLead.toString());*/
 
 
 
