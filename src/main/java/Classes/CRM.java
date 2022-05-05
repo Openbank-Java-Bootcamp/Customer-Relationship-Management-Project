@@ -66,6 +66,7 @@ public class CRM {
             throw new IllegalArgumentException("Invalid input");
         }
     }
+
     public void createLead(Scanner scanner) {
 
         String leadName = null;
