@@ -30,10 +30,10 @@ public class CRM {
                     System.out.println(questions[i]);
                     String userInput = scanner.nextLine();
                     if (userInput.isEmpty()) {
-                        throw new IllegalArgumentException("Input cannot be empty");
+                        System.err.println("Input cannot be empty");
                     }
                     answers[i] = userInput;
-                    System.out.println("Hi! " + userInput);
+                    System.out.println("You added: " + userInput);
                     nextQuestion = true;
                     keepAskingSameQuestion = false;
                     i++;
@@ -71,10 +71,16 @@ public class CRM {
 
 
     public void showLeads() {
-        for (int i = 0; i < leadList.size(); i++) {
-           /* throw new IllegalArgumentException("Not a valid Lead ID");*/
-            System.out.println(leadList.get(i).toString());
-        }
+
+
+            if (leadList.size() < 1) {
+                System.out.println("\n\nNo leads to show\n\n");
+            } else {
+                for (Map.Entry<String, Lead> entry : leadList.entrySet()) {
+                    System.out.println(entry.getValue());
+                }
+            }
+
     }
 
     public Lead lookupLead(String lead_id) {
