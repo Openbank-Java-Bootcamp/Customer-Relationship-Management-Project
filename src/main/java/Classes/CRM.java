@@ -1,6 +1,8 @@
 package Classes;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CRM {
     public Map<String, Lead> leadList = new HashMap();
@@ -15,6 +17,43 @@ public class CRM {
             "Enter EXIT to exit.\n";
 
     public CRM() {
+    }
+
+    public void verifyName(String name) {
+        String regx = "[a-zA-Z]+\\.?";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Only letters and spaces allowed");
+        }
+    }
+
+    public void verifyPhone(String phone) {
+        // "[1-9][0-9]{9,14}"
+        String regx = "[1-9][0-9]{8,9}";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(phone);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Phone number must be 9 digits.");
+        }
+    }
+
+    public void verifyEmail(String email) {
+        String regx = "^(.+)@(.+)$";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Not a valid email address.");
+        }
+    }
+
+    public void verifyCompany(String company) {
+        String regx = ".+";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(company);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Invalid input");
+        }
     }
     public void createLead(Scanner scanner) {
         String leadName = null;
