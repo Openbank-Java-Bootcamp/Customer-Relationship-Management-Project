@@ -5,9 +5,15 @@ import Enums.Product;
 import Enums.Status;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CRM {
+
+
+
     public Map<String,Lead> leadList = new HashMap<>();
+
     private List<Contact> contactList = new ArrayList<>();
     private Map<String,Opportunity> opportunityList = new HashMap<>();
     private Map<String,Account> accountList = new HashMap<>();
@@ -24,25 +30,102 @@ public class CRM {
     public CRM() {
     }
 
+    public void verifyName(String name) {
+        String regx = "[a-zA-Z]+\\.?";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Only letters and spaces allowed");
+        }
+    }
+
+    public void verifyPhone(String phone) {
+        // "[1-9][0-9]{9,14}"
+        String regx = "[1-9][0-9]{8,9}";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(phone);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Phone number must be 9 digits.");
+        }
+    }
+
+    public void verifyEmail(String email) {
+        String regx = "^(.+)@(.+)$";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Not a valid email address.");
+        }
+    }
+
+    public void verifyCompany(String company) {
+        String regx = ".+";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(company);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Invalid input");
+        }
+    }
     public void createLead(Scanner scanner) {
-        System.out.println("Please type Lead's name");
-        String leadsName = scanner.nextLine();
-        System.out.println("Please type Lead's phone number");
-        String leadsPhoneNumberAsString = scanner.nextLine();
-        int leadsPhoneNumberAsInt = Integer.parseInt(leadsPhoneNumberAsString);
-        System.out.println("Please type Lead's email");
-        String leadsEmail = scanner.nextLine();
-        System.out.println("Please type Lead's company's name");
-        String leadsCompany = scanner.nextLine();
-        Lead newLead = new Lead(leadsName, leadsPhoneNumberAsInt, leadsEmail, leadsCompany);
+
+        String leadName = null;
+        String leadPhone = null;
+        String leadEmail = null;
+        String leadCompany = null;
+        while (leadName == null) {
+            try {
+                System.out.println("Please type Lead's name");
+                leadName = scanner.nextLine();
+                verifyName(leadName);
+            } catch (IllegalArgumentException e) {
+                leadName = null;
+                System.err.println("Only letters and spaces allowed");
+            }
+        }
+        while (leadPhone == null) {
+            try {
+                System.out.println("Please type Lead's phone number");
+                leadPhone = scanner.nextLine();
+                verifyPhone(leadPhone);
+            } catch (IllegalArgumentException e) {
+                leadPhone = null;
+                System.err.println("Phone number must be 9 digits.");
+            }
+        }
+        int leadPhoneAsInt = Integer.parseInt(leadPhone);
+        while (leadEmail == null) {
+            try {
+                System.out.println("Please type Lead's email");
+                leadEmail = scanner.nextLine();
+                verifyEmail(leadEmail);
+            } catch (IllegalArgumentException e) {
+                leadEmail = null;
+                System.err.println("Not a valid email address.");
+            }
+        }
+        while (leadCompany == null) {
+            try {
+                System.out.println("Please type Lead's company");
+                leadCompany = scanner.nextLine();
+                verifyCompany(leadCompany);
+            } catch (IllegalArgumentException e) {
+                leadCompany = null;
+                System.err.println("Invalid input");
+            }
+        }
+        Lead newLead = new Lead(leadName, leadPhoneAsInt, leadEmail, leadCompany);
         leadList.put(newLead.getId(), newLead);
         System.out.println("\n\nLead created:");
         System.out.println(newLead.toString());
     }
 
     public void showLeads() {
-        for (int i = 0; i < leadList.size(); i++) {
-            System.out.println(leadList.get(i).toString());
+        if (leadList.size() < 1) {
+            System.out.println("\n\nNo leads to show\n\n");
+        } else {
+            for (Map.Entry<String, Lead> entry : leadList.entrySet()) {
+                System.out.println(entry.getValue());
+            }
         }
     }
 
