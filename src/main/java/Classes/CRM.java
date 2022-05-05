@@ -111,16 +111,13 @@ public class CRM {
 
 
     public void showLeads() {
-
-
-            if (leadList.size() < 1) {
-                System.out.println("\n\nNo leads to show\n\n");
-            } else {
-                for (Map.Entry<String, Lead> entry : leadList.entrySet()) {
-                    System.out.println(entry.getValue());
-                }
+        if (leadList.size() < 1) {
+            System.out.println("\n\nNo leads to show\n\n");
+        } else {
+            for (Map.Entry<String, Lead> entry : leadList.entrySet()) {
+                System.out.println(entry.getValue());
             }
-
+        }
     }
 
     public Lead lookupLead(String lead_id) {
