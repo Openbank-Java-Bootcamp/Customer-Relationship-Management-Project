@@ -96,4 +96,14 @@ public class Account {
         return String.valueOf(accountIdCounter.getAndIncrement() + 1);
     }
 
+    @Override
+    public String toString() {
+        return "Account: " + id +
+                "Industry:  " + industry +
+                "Employee Count:  " + employeeCount +
+                "City: " + city +
+                "Country:  " + country +
+                "Contact List" + contactList +
+                "Opportunity List" + opportunityList;
+    }
 }
