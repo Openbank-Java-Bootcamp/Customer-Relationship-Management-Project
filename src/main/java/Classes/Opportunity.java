@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Opportunity {
     private String id;
     private Product product;
+    private int quantity;
     private Contact decisionMaker;
     private Status status;
     private static AtomicInteger opportunityIdCounter = new AtomicInteger();
@@ -15,16 +16,13 @@ public class Opportunity {
 
 
     //CONSTRUCTOR
-    public Opportunity(Product product, Contact decisionMaker, Status status) {
+    public Opportunity(Product product, int quantity, Contact decisionMaker) {
         id = createID();
         this.product = product;
+        this.quantity = quantity;
         this.decisionMaker = decisionMaker;
-        this.status = status;
         setStatus(Status.OPEN);
     }
-
-
-
     //SETTERS
 
     public void setProduct(Product product) {
@@ -39,7 +37,9 @@ public class Opportunity {
         this.status = status;
     }
 
-
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     //GETTERS
     public String getId() {
@@ -58,7 +58,9 @@ public class Opportunity {
         return status;
     }
 
-
+    public int getQuantity() {
+        return quantity;
+    }
 
     //METHODS
     public static String createID() {
@@ -69,8 +71,9 @@ public class Opportunity {
     @Override
     public String toString() {
         return "Opportunity " + id +
-                "Product:  " + product +
-                "Decision Maker:  " + decisionMaker +
-                "Status:  " + status;
+                "\nProduct:  " + product +
+                "\nQuantity:  " + quantity +
+                "\nDecision Maker:  " + decisionMaker +
+                "\nStatus:  " + status;
     }
 }
