@@ -19,17 +19,17 @@ public class CRM {
     private Map<String,Account> accountList = new HashMap<>();
 
 
-    private static String menuOptions = "\n\nEnter NEW LEAD to create a new Lead.\n" +
-            "Enter SHOW LEADS to see all Leads.\n" +
-            "Enter LOOKUP LEAD along with the Lead ID to see a particular Lead.\n" +
-            "Enter CONVERT along with the Lead ID to convert a Lead to an Opportunity.\n" +
-            "Enter SHOW OPPORTUNITIES to see all Opportunities.\n" +
-            "Enter LOOKUP OPPORTUNITY along with the Opportunity ID to see a particular Opportunity.\n" +
-            "Enter LOOKUP CONTACT along with the Contact ID to see a particular Contact.\n" +
+    private static String menuOptions = "\n\nEnter " + ConsoleColors.BLUE + "NEW LEAD" + ConsoleColors.RESET + " to create a new Lead.\n" +
+            "Enter " + ConsoleColors.BLUE + "SHOW LEADS" + ConsoleColors.RESET + " to see all Leads.\n" +
+            "Enter " + ConsoleColors.BLUE + "LOOKUP LEAD <id>" + ConsoleColors.RESET + " to see a particular Lead.\n" +
+            "Enter " + ConsoleColors.BLUE + "CONVERT <id>" + ConsoleColors.RESET + " to convert a Lead to an Opportunity.\n" +
+            "Enter " + ConsoleColors.BLUE + "SHOW OPPORTUNITIES" + ConsoleColors.RESET + " to see all Opportunities.\n" +
+            "Enter " + ConsoleColors.BLUE + "LOOKUP OPPORTUNITY <id>" + ConsoleColors.RESET + " to see a particular Opportunity.\n" +
+            "Enter " + ConsoleColors.BLUE + "LOOKUP CONTACT <id>>" + ConsoleColors.RESET + " to see a particular Contact.\n" +
             //"Enter LOOKUP ACCOUNT along with the Account ID to see a particular Account.\n" +
-            "Enter CLOSE-WON along with the Opportunity ID to close an won Opportunity.\n" +
-            "Enter CLOSE-LOST along with the Opportunity ID to close a lost Opportunity.\n" +
-            "Enter EXIT to exit.\n";
+            "Enter " + ConsoleColors.BLUE + "CLOSE-WON <id>" + ConsoleColors.RESET + " to close an won Opportunity.\n" +
+            "Enter " + ConsoleColors.BLUE + "CLOSE-LOST <id>" + ConsoleColors.RESET + " to close a lost Opportunity.\n" +
+            "Enter " + ConsoleColors.RED + "EXIT" + ConsoleColors.RESET + " to exit.\n";
 
     public CRM() {
     }
@@ -71,13 +71,14 @@ public class CRM {
     }
 
     public void createLead(Scanner scanner) {
+        System.out.println("Please provide the following information to create a Lead:");
         String leadName = null;
         String leadPhone = null;
         String leadEmail = null;
         String leadCompany = null;
         while (leadName == null) {
             try {
-                System.out.println("Please type Lead's name");
+                System.out.print("Name: ");
                 leadName = scanner.nextLine();
                 verifyName(leadName);
             } catch (IllegalArgumentException e) {
@@ -87,7 +88,7 @@ public class CRM {
         }
         while (leadPhone == null) {
             try {
-                System.out.println("Please type Lead's phone number");
+                System.out.print("Phone number: ");
                 leadPhone = scanner.nextLine();
                 verifyPhone(leadPhone);
             } catch (IllegalArgumentException e) {
@@ -98,7 +99,7 @@ public class CRM {
         int leadPhoneAsInt = Integer.parseInt(leadPhone);
         while (leadEmail == null) {
             try {
-                System.out.println("Please type Lead's email");
+                System.out.print("Email: ");
                 leadEmail = scanner.nextLine();
                 verifyEmail(leadEmail);
             } catch (IllegalArgumentException e) {
@@ -108,7 +109,7 @@ public class CRM {
         }
         while (leadCompany == null) {
             try {
-                System.out.println("Please type Lead's company");
+                System.out.print("Company name: ");
                 leadCompany = scanner.nextLine();
                 verifyCompany(leadCompany);
             } catch (IllegalArgumentException e) {
@@ -118,7 +119,7 @@ public class CRM {
         }
         Lead newLead = new Lead(leadName, leadPhoneAsInt, leadEmail, leadCompany);
         leadList.put(newLead.getId(), newLead);
-        System.out.println("\n\nLead created:");
+        System.out.println("\n\nLead created: ");
         System.out.println(newLead.toString());
     }
 
@@ -220,14 +221,15 @@ public class CRM {
         int productQuantity = quantityOfProduct(scanner);
         Opportunity newOpportunity = createOpportunity(productType,productQuantity, newContact);
         createAccount(scanner, newContact, newOpportunity);
-        System.out.println("New Opportunity created:\n" + newOpportunity.toString());
+        System.out.println("\nNew Opportunity created:\n" + newOpportunity.toString());
     }
 
     public Product typeOfProduct(Scanner scanner){
         System.out.println(
-                "Enter (1) for the product: Hybrid" +
-                        "\nEnter (2) for the product: Flatbed" +
-                        "\nEnter (3) for the product: Box"
+                "What type of product:" +
+                "\nEnter (1) for the Hybrid" +
+                        "\nEnter (2) for Flatbed" +
+                        "\nEnter (3) for Box"
         );
         int productChoice = CRM.verifyIntInput(scanner, 1, 3);
         switch(productChoice){
@@ -240,17 +242,18 @@ public class CRM {
         }
     }
     public int quantityOfProduct(Scanner scanner) {
-        System.out.println("Enter a quantity for the product:");
+        System.out.print("Product quantity: ");
         int quantity = verifyIntInput(scanner, 1, Integer.MAX_VALUE);
         return quantity;
     }
     public Industry typeOfIndustry(Scanner scanner){
         System.out.println(
-                "Enter (1) for the industry: produce" +
-                        "\nEnter (2) for the product: ecommerce" +
-                        "\nEnter (3) for the product: manufacturing"+
-                        "\nEnter (4) for the product: medical"+
-                        "\nEnter (5) for the product: other"
+                "\nPlease specify the industry of the Lead's company: " +
+                "\nEnter (1) for Produce" +
+                        "\nEnter (2) for Ecommerce" +
+                        "\nEnter (3) for Manufacturing"+
+                        "\nEnter (4) for Medical"+
+                        "\nEnter (5) for Other"
         );
         int productChoice = CRM.verifyIntInput(scanner, 1, 5);
         switch(productChoice){
@@ -272,12 +275,13 @@ public class CRM {
         return newOpportunity;
     }
     public void createAccount(Scanner scanner, Contact newContact, Opportunity newOpportunity){
+        System.out.println("\nPlease provide the following information about the company to create the Account:");
         Industry industryType = typeOfIndustry(scanner);
-        System.out.println("Please type the number of employees");
+        System.out.print("Number of employees: ");
         int employeeCount = CRM.verifyIntInput(scanner, 1, Integer.MAX_VALUE);
-        System.out.println("Please type Account city");
+        System.out.print("City: ");
         String city = scanner.nextLine();
-        System.out.println("Please type Account country");
+        System.out.print("Country: ");
         String country = scanner.nextLine();
         List<Contact> newContactList = Arrays.asList(newContact);
         List<Opportunity> newOpportunityList = Arrays.asList(newOpportunity);
