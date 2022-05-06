@@ -1,4 +1,4 @@
-# Customer-Relationship-Management-Project
+# Customer Relationship Management Project
 
 This CRM is used to track prospective and existing customers through the sales process.   
 
