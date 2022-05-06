@@ -25,7 +25,7 @@ public class CRM {
             "Enter " + ConsoleColors.BLUE + "CONVERT <id>" + ConsoleColors.RESET + " to convert a Lead to an Opportunity.\n" +
             "Enter " + ConsoleColors.BLUE + "SHOW OPPORTUNITIES" + ConsoleColors.RESET + " to see all Opportunities.\n" +
             "Enter " + ConsoleColors.BLUE + "LOOKUP OPPORTUNITY <id>" + ConsoleColors.RESET + " to see a particular Opportunity.\n" +
-            "Enter " + ConsoleColors.BLUE + "LOOKUP CONTACT <id>>" + ConsoleColors.RESET + " to see a particular Contact.\n" +
+            "Enter " + ConsoleColors.BLUE + "LOOKUP CONTACT <id>" + ConsoleColors.RESET + " to see a particular Contact.\n" +
             //"Enter LOOKUP ACCOUNT along with the Account ID to see a particular Account.\n" +
             "Enter " + ConsoleColors.BLUE + "CLOSE-WON <id>" + ConsoleColors.RESET + " to close an won Opportunity.\n" +
             "Enter " + ConsoleColors.BLUE + "CLOSE-LOST <id>" + ConsoleColors.RESET + " to close a lost Opportunity.\n" +
@@ -71,7 +71,7 @@ public class CRM {
     }
 
     public void createLead(Scanner scanner) {
-        System.out.println("Please provide the following information to create a Lead:");
+        System.out.println("\nPlease provide the following information to create a Lead:");
         String leadName = null;
         String leadPhone = null;
         String leadEmail = null;
@@ -173,35 +173,39 @@ public class CRM {
                 lookupLead(userChoice);
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
-            } else if (userChoice.contains("CONVERT")) {  //works
-                String lead_id = userChoice.split(" ")[1];
-                convertLead(scanner, lead_id);
+            } else if (userChoice.contains("CONVERT")) {
+                String leadId = userChoice.split(" ")[1];
+                convertLead(scanner, leadId);
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
-            } else if (userChoice.contains("SHOW OPPORTUNITIES")) {  //works
+            } else if (userChoice.contains("SHOW OPPORTUNITIES")) {
                 showOpportunities();
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
-            } else if (userChoice.contains("LOOKUP OPPORTUNITY")) {  //works
+            } else if (userChoice.contains("LOOKUP OPPORTUNITY")) {
                 lookupOpportunity(userChoice);
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
-            } else if (userChoice.contains("LOOKUP CONTACT")) {  //works
+            } else if (userChoice.contains("LOOKUP CONTACT")) {
                 lookupContact(userChoice);
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
-            } else if (userChoice.contains("LOOKUP ACCOUNT")) {  //works
-                lookupAccount(userChoice);
-                System.out.println(menuOptions);
-                userChoice = scanner.nextLine().toUpperCase();
-            } else if (userChoice.contains("CLOSE-WON")) { //did not try yet
+            } else if (userChoice.contains("CLOSE-WON")) {
                 String closeWonId = userChoice.split(" ")[1];
-                closeOpportunity(closeWonId, Status.CLOSED_WON);
+                try {
+                    closeOpportunity(closeWonId, Status.CLOSED_WON);
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid Opportunity ID");
+                }
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
-            } else if (userChoice.contains("CLOSE-LOST")) { //did not try
+            } else if (userChoice.contains("CLOSE-LOST")) {
                 String closeLostId = userChoice.split(" ")[1];
-                closeOpportunity(closeLostId, Status.CLOSED_LOST);
+                try {
+                    closeOpportunity(closeLostId, Status.CLOSED_LOST);
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid Opportunity ID");
+                }
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
             } else if (userChoice.equals("EXIT")) {
@@ -215,13 +219,17 @@ public class CRM {
     }
 
 
-    public void convertLead(Scanner scanner, String id){
-        Contact newContact = createContact(leadList.get(id));
-        Product productType = typeOfProduct(scanner);
-        int productQuantity = quantityOfProduct(scanner);
-        Opportunity newOpportunity = createOpportunity(productType,productQuantity, newContact);
-        createAccount(scanner, newContact, newOpportunity);
-        System.out.println("\nNew Opportunity created:\n" + newOpportunity.toString());
+    public void convertLead(Scanner scanner, String leadId){
+        try {
+            Contact newContact = createContact(leadList.get(leadId));
+            Product productType = typeOfProduct(scanner);
+            int productQuantity = quantityOfProduct(scanner);
+            Opportunity newOpportunity = createOpportunity(productType, productQuantity, newContact);
+            createAccount(scanner, newContact, newOpportunity);
+            System.out.println("New Opportunity created:\n" + newOpportunity.toString());
+        } catch (Exception e) {
+            System.err.println("Invalid lead, choose other command");
+        }
     }
 
     public Product typeOfProduct(Scanner scanner){
@@ -248,7 +256,7 @@ public class CRM {
     }
     public Industry typeOfIndustry(Scanner scanner){
         System.out.println(
-                "\nPlease specify the industry of the Lead's company: " +
+                "\nIndustry type: " +
                 "\nEnter (1) for Produce" +
                         "\nEnter (2) for Ecommerce" +
                         "\nEnter (3) for Manufacturing"+
@@ -269,24 +277,71 @@ public class CRM {
                 return Industry.OTHER;
         }
     }
+//    public Opportunity createOpportunity(Product productType, int productQuantity, Contact newContact){
+//        Opportunity newOpportunity = new Opportunity();
+//        try {
+//            newOpportunity.setProduct(productType);
+//            newOpportunity.setQuantity(productQuantity);
+//            newOpportunity.setDecisionMaker(newContact);
+//            opportunityList.put(newOpportunity.getId(), newOpportunity);
+//        }catch(Exception e){
+//            System.err.println("\n\n Opportunity not created\n\n");
+//        }
+//        return newOpportunity;
+//    }
+
     public Opportunity createOpportunity(Product productType, int productQuantity, Contact newContact){
         Opportunity newOpportunity = new Opportunity(productType, productQuantity, newContact);
         opportunityList.put(newOpportunity.getId(), newOpportunity);
         return newOpportunity;
     }
-    public void createAccount(Scanner scanner, Contact newContact, Opportunity newOpportunity){
-        System.out.println("\nPlease provide the following information about the company to create the Account:");
+
+    public void createAccount(Scanner scanner, Contact newContact, Opportunity newOpportunity) throws IllegalArgumentException {
+        if(!contactList.containsKey(newContact.getId())){
+            throw new IllegalArgumentException("The Contact is not on the contacts list");
+        } else if (!opportunityList.containsKey(newOpportunity.getId())){
+            throw new IllegalArgumentException("The Opportunity is not on the opportunities list");
+        }
         Industry industryType = typeOfIndustry(scanner);
-        System.out.print("Number of employees: ");
+        System.out.println("Please type the number of employees");
         int employeeCount = CRM.verifyIntInput(scanner, 1, Integer.MAX_VALUE);
-        System.out.print("City: ");
-        String city = scanner.nextLine();
-        System.out.print("Country: ");
-        String country = scanner.nextLine();
-        List<Contact> newContactList = Arrays.asList(newContact);
-        List<Opportunity> newOpportunityList = Arrays.asList(newOpportunity);
+        String city = null;
+        while (city == null) {
+            try {
+                System.out.println("Please type Account's city");
+                city = scanner.nextLine();
+                verifyCityOrCountry(city);
+            } catch (IllegalArgumentException e) {
+                city = null;
+                System.err.println("Only letters and spaces allowed");
+            }
+        }
+        String country = null;
+        while (country == null) {
+            try {
+                System.out.println("Please type Account's country");
+                country = scanner.nextLine();
+                verifyCityOrCountry(country);
+            } catch (IllegalArgumentException e) {
+                country = null;
+                System.err.println("Only letters and spaces allowed");
+            }
+        }
+        HashMap<String, Contact> newContactList = new HashMap<>();
+        newContactList.put(newContact.getId(), newContact);
+        HashMap<String, Opportunity> newOpportunityList = new HashMap<>();
+        newOpportunityList.put(newOpportunity.getId(), newOpportunity);
         Account newAccount = new Account(industryType, employeeCount, city, country, newContactList, newOpportunityList);
         accountList.put(newAccount.getId(),newAccount);
+    }
+
+    public void verifyCityOrCountry(String name) {
+        String regx = "[a-zA-Z]+\\.?";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Only letters and spaces allowed");
+        }
     }
 
 
@@ -360,7 +415,7 @@ public class CRM {
     }
 
     public void closeOpportunity(String id, Status status){
-        if (opportunityList.get(id) == null) {
+        if (opportunityList.get(id).getProduct() == null) {
             throw new IllegalArgumentException("Not a valid Opportunity ID");
         }
         opportunityList.get(id).setStatus(status);

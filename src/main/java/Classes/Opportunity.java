@@ -17,11 +17,14 @@ public class Opportunity {
 
     //CONSTRUCTOR
     public Opportunity(Product product, int quantity, Contact decisionMaker) {
-        id = createID();
+        this.id = createID();
         this.product = product;
         this.quantity = quantity;
         this.decisionMaker = decisionMaker;
-        setStatus(Status.OPEN);
+        this.setStatus(Status.OPEN);
+    }
+
+    public Opportunity() {
     }
     //SETTERS
 
@@ -70,7 +73,7 @@ public class Opportunity {
 
     @Override
     public String toString() {
-        return "Opportunity " + id +
+        return "Opportunity " + this.id +
                 "\nProduct:  " + product +
                 "\nQuantity:  " + quantity +
                 "\nDecision Maker:  " + decisionMaker +

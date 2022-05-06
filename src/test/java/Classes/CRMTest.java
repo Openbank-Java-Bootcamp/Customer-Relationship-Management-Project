@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringReader;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -299,5 +300,71 @@ class CRMTest {
         assertDoesNotThrow(()->testCrm.showContacts());
     }
 
+    @Test
+    public void menu_LookupLead_Works() {
+        Scanner testScan = new Scanner(new StringReader("Lookup Lead 1"));
+        //prompts for input of lead info
+        assertThrows(NoSuchElementException.class, ()->testCrm.menu(testScan));
+    }
+
+    @Test
+    public void menu_NewLead_Works() {
+        Scanner testScan = new Scanner(new StringReader("new lead"));
+        //displays lead info, then asks for next input, exception due to needing input for next step
+        assertThrows(NoSuchElementException.class, ()->testCrm.menu(testScan));
+    }
+
+    @Test
+    public void menu_ShowLeads_Works() {
+        Scanner testScan = new Scanner(new StringReader("show leads"));
+        //displays leads, then asks for next input, exception due to needing input for next menu option
+        assertThrows(NoSuchElementException.class, ()->testCrm.menu(testScan));
+    }
+
+    @Test
+    public void menu_ConvertLead_Works() {
+        Scanner testScan = new Scanner(new StringReader("convert 1"));
+        //starts method to make opportunity, then asks for next input, exception due to needing input for next step
+        assertThrows(NoSuchElementException.class, ()->testCrm.menu(testScan));
+    }
+
+    @Test
+    public void menu_ShowOpportunities_Works() {
+        Scanner testScan = new Scanner(new StringReader("show opportunities"));
+        //displays opportunities, exception due to needing input for next step
+        assertThrows(NoSuchElementException.class, ()->testCrm.menu(testScan));
+    }
+
+    @Test
+    public void menu_LookupContact_Works() {
+        contact1 = testCrm.createContact(lead1);
+        Scanner testScan = new Scanner(new StringReader("lookup contact"));
+        //displays opportunities, exception due to needing input for next step
+        assertThrows(NoSuchElementException.class, ()->testCrm.menu(testScan));
+    }
+
+    @Test
+    public void menu_CloseWon_Works() {
+        contact1 = testCrm.createContact(lead1);
+        opportunity1 = testCrm.createOpportunity(Product.BOX, 23, contact1);
+        Scanner testScan = new Scanner(new StringReader("close-won 1"));
+        //displays opportunities, exception due to needing input for next step
+        assertThrows(NoSuchElementException.class, ()->testCrm.menu(testScan));
+    }
+
+    @Test
+    public void menu_CloseLost_Works() {
+        contact1 = testCrm.createContact(lead1);
+        opportunity1 = testCrm.createOpportunity(Product.BOX, 23, contact1);
+        Scanner testScan = new Scanner(new StringReader("close-lost 1"));
+        //displays opportunities, exception due to needing input for next step
+        assertThrows(NoSuchElementException.class, ()->testCrm.menu(testScan));
+    }
+
+    @Test
+    public void menu_Exit_Works() {
+        Scanner testScan = new Scanner(new StringReader("exit"));
+        assertDoesNotThrow(()->testCrm.menu(testScan));
+    }
 
 }
