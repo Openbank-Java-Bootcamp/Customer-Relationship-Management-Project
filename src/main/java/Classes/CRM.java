@@ -277,18 +277,7 @@ public class CRM {
                 return Industry.OTHER;
         }
     }
-//    public Opportunity createOpportunity(Product productType, int productQuantity, Contact newContact){
-//        Opportunity newOpportunity = new Opportunity();
-//        try {
-//            newOpportunity.setProduct(productType);
-//            newOpportunity.setQuantity(productQuantity);
-//            newOpportunity.setDecisionMaker(newContact);
-//            opportunityList.put(newOpportunity.getId(), newOpportunity);
-//        }catch(Exception e){
-//            System.err.println("\n\n Opportunity not created\n\n");
-//        }
-//        return newOpportunity;
-//    }
+
 
     public Opportunity createOpportunity(Product productType, int productQuantity, Contact newContact){
         Opportunity newOpportunity = new Opportunity(productType, productQuantity, newContact);
