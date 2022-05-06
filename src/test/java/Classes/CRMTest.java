@@ -16,6 +16,7 @@ class CRMTest {
     private Lead emptyLead;
     private CRM testCrm;
     private Contact contact1;
+    private Opportunity opportunity1;
 
 
     @BeforeEach
@@ -40,6 +41,55 @@ class CRMTest {
     public void lookupLead_NoId_NoThrow() {
         assertDoesNotThrow(() -> testCrm.lookupLead("lookup lead"));
     }
+    @Test
+    void lookupContact_ValidId_Works() {
+        contact1 = testCrm.createContact(lead1);
+        assertEquals(contact1, testCrm.lookupContact("Lookup Contact 1"));
+    }
+
+    @Test
+    public void lookupContact_invalidID_NoThrow() {
+        assertDoesNotThrow(() -> testCrm.lookupContact("lookup contact 999"));
+        assertDoesNotThrow(() -> testCrm.lookupContact("lookup contact -78"));
+        assertDoesNotThrow(() -> testCrm.lookupContact("lookup contact word"));
+    }
+
+    @Test
+    public void lookupContact_NoId_NoThrow() {
+        assertDoesNotThrow(() -> testCrm.lookupContact("lookup contact"));
+    }
+
+    @Test
+    void lookupOpportunity_ValidId_Works() {
+        contact1 = testCrm.createContact(lead1);
+        opportunity1 = testCrm.createOpportunity(Product.BOX, 23, contact1);
+        assertEquals(opportunity1, testCrm.lookupOpportunity("Lookup opportunity 1"));
+    }
+
+    @Test
+    public void lookupOpportunity_invalidID_NoThrow() {
+        assertDoesNotThrow(() -> testCrm.lookupOpportunity("lookup Opportunity 999"));
+        assertDoesNotThrow(() -> testCrm.lookupOpportunity("lookup opportunity -78"));
+        assertDoesNotThrow(() -> testCrm.lookupOpportunity("lookup opportunity word"));
+    }
+
+    @Test
+    public void lookupOpportunity_NoId_NoThrow() {
+        assertDoesNotThrow(() -> testCrm.lookupOpportunity("lookup Opportunity"));
+    }
+
+    @Test
+    public void lookupAccount_invalidID_NoThrow() {
+        assertDoesNotThrow(() -> testCrm.lookupAccount("lookup account 999"));
+        assertDoesNotThrow(() -> testCrm.lookupAccount("lookup Account -78"));
+        assertDoesNotThrow(() -> testCrm.lookupAccount("lookup account word"));
+    }
+
+    @Test
+    public void lookupAccount_NoId_NoThrow() {
+        assertDoesNotThrow(() -> testCrm.lookupAccount("lookup account"));
+    }
+
 
     @Test
     public void createContact_ValidLead_Works() {
@@ -118,7 +168,8 @@ class CRMTest {
     public void createOpportunity_productAndContactPassed_Works(){
         Contact tryContact = new Contact("Ana", 123456789, "aaa@aaa.aa");
         Product tryProduct = Product.HYBRID;
-        Opportunity testOpportunity = testCrm.createOpportunity(tryProduct, tryContact);
+        int tryQuantity = 46;
+        Opportunity testOpportunity = testCrm.createOpportunity(tryProduct, tryQuantity, tryContact);
         assertEquals(Status.OPEN, testOpportunity.getStatus());
     }
 
@@ -178,8 +229,75 @@ class CRMTest {
         assertThrows(IllegalArgumentException.class, ()-> testCrm.verifyCompany(" "));
     }
 
+    @Test
+    public void closeOpportunity_ValidIdWon_Works() {
+        contact1 = testCrm.createContact(lead1);
+        opportunity1 = testCrm.createOpportunity(Product.BOX, 23, contact1);
+        String id = opportunity1.getId();
+        testCrm.closeOpportunity(id, Status.CLOSED_WON);
+        assertEquals(Status.CLOSED_WON, opportunity1.getStatus());
+    }
 
+    @Test
+    public void closeOpportunity_ValidIdLost_Works() {
+        contact1 = testCrm.createContact(lead1);
+        opportunity1 = testCrm.createOpportunity(Product.BOX, 23, contact1);
+        String id = opportunity1.getId();
+        testCrm.closeOpportunity(id, Status.CLOSED_LOST);
+        assertEquals(Status.CLOSED_LOST, opportunity1.getStatus());
+    }
 
+    @Test
+    public void closeOpportunity_InvalidId_Throws() {
+        assertThrows(IllegalArgumentException.class, ()-> testCrm.closeOpportunity("0", Status.CLOSED_WON));
+        assertThrows(IllegalArgumentException.class, ()-> testCrm.closeOpportunity("", Status.CLOSED_LOST));
+    }
+
+    @Test
+    public void showOpportunities_NonEmptyList_Works() {
+        contact1 = testCrm.createContact(lead1);
+        opportunity1 = testCrm.createOpportunity(Product.BOX, 23, contact1);
+        assertDoesNotThrow(()->testCrm.showOpportunities());
+    }
+
+    @Test
+    public void showOpportunities_EmptyList_NoThrow() {
+        assertDoesNotThrow(()->testCrm.showOpportunities());
+    }
+
+    @Test
+    public void showLeads_NonEmptyList_Works() {
+        assertDoesNotThrow(()->testCrm.showLeads());
+    }
+
+    @Test
+    public void showLeads_EmptyList_NoThrow() {
+        testCrm.leadList.remove("1");
+        assertDoesNotThrow(()->testCrm.showLeads());
+    }
+
+    @Test
+    public void showContacts_NonEmptyList_Works() {
+        contact1 = testCrm.createContact(lead1);
+        assertDoesNotThrow(()->testCrm.showContacts());
+    }
+
+    @Test
+    public void showContacts_EmptyList_NoThrow() {
+        assertDoesNotThrow(()->testCrm.showContacts());
+    }
+
+    @Test
+    public void showAccounts_NonEmptyList_Works() {
+        contact1 = testCrm.createContact(lead1);
+        opportunity1 = testCrm.createOpportunity(Product.BOX, 23, contact1);
+        assertDoesNotThrow(()->testCrm.showAccounts());
+    }
+
+    @Test
+    public void showAccounts_EmptyList_NoThrow() {
+        assertDoesNotThrow(()->testCrm.showContacts());
+    }
 
 
 }

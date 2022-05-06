@@ -14,15 +14,19 @@ public class CRM {
 
     public Map<String,Lead> leadList = new HashMap<>();
 
-    private List<Contact> contactList = new ArrayList<>();
+    private Map<String, Contact> contactList = new HashMap<>();
     private Map<String,Opportunity> opportunityList = new HashMap<>();
     private Map<String,Account> accountList = new HashMap<>();
 
 
     private static String menuOptions = "\n\nEnter NEW LEAD to create a new Lead.\n" +
             "Enter SHOW LEADS to see all Leads.\n" +
-            "Enter LOOKUP LEAD along with the Lead ID to see a particular lead.\n" +
-            "Enter CONVERT along with the Lead ID to convert a lead to an opportunity.\n" +
+            "Enter LOOKUP LEAD along with the Lead ID to see a particular Lead.\n" +
+            "Enter CONVERT along with the Lead ID to convert a Lead to an Opportunity.\n" +
+            "Enter SHOW OPPORTUNITIES to see all Opportunities.\n" +
+            "Enter LOOKUP OPPORTUNITY along with the Opportunity ID to see a particular Opportunity.\n" +
+            "Enter LOOKUP CONTACT along with the Contact ID to see a particular Contact.\n" +
+            //"Enter LOOKUP ACCOUNT along with the Account ID to see a particular Account.\n" +
             "Enter CLOSE-WON along with the Opportunity ID to close an won Opportunity.\n" +
             "Enter CLOSE-LOST along with the Opportunity ID to close a lost Opportunity.\n" +
             "Enter EXIT to exit.\n";
@@ -119,27 +123,26 @@ public class CRM {
     }
 
     public void showLeads() {
-        if (leadList.size() < 1) {
-            System.out.println("\n\nNo leads to show\n\n");
-        } else {
-            for (Map.Entry<String, Lead> entry : leadList.entrySet()) {
-                System.out.println(entry.getValue());
-            }
+        try { for (Map.Entry<String, Lead> entry : leadList.entrySet()) {
+            System.out.println(entry.getValue());
+        }
+        } catch (Exception e) {
+            System.out.println("\n\nNo Leads to show\n\n");
         }
     }
 
     public Lead lookupLead(String userChoice) {
-        String lead_id = null;
+        String leadId = null;
         try {
-            lead_id = userChoice.split(" ")[2];
+            leadId = userChoice.split(" ")[2];
         } catch (ArrayIndexOutOfBoundsException e) {
         }
         try {
-            System.out.println(leadList.get(lead_id).toString());
+            System.out.println(leadList.get(leadId).toString());
         } catch (NullPointerException e) {
             System.err.println("Not a valid Lead Id.");
         }
-        return leadList.get(lead_id);
+        return leadList.get(leadId);
     }
 
     public Contact createContact(Lead lead){
@@ -147,7 +150,7 @@ public class CRM {
         int contactNumber = lead.getPhoneNumber();
         String contactEmail = lead.getEmail();
         Contact newContact = new Contact(contactName, contactNumber, contactEmail);
-        contactList.add(newContact);
+        contactList.put(newContact.getId(), newContact);
         leadList.remove(lead.getId());
         return newContact;
     }
@@ -174,6 +177,22 @@ public class CRM {
                 convertLead(scanner, lead_id);
                 System.out.println(menuOptions);
                 userChoice = scanner.nextLine().toUpperCase();
+            } else if (userChoice.contains("SHOW OPPORTUNITIES")) {  //works
+                showOpportunities();
+                System.out.println(menuOptions);
+                userChoice = scanner.nextLine().toUpperCase();
+            } else if (userChoice.contains("LOOKUP OPPORTUNITY")) {  //works
+                lookupOpportunity(userChoice);
+                System.out.println(menuOptions);
+                userChoice = scanner.nextLine().toUpperCase();
+            } else if (userChoice.contains("LOOKUP CONTACT")) {  //works
+                lookupContact(userChoice);
+                System.out.println(menuOptions);
+                userChoice = scanner.nextLine().toUpperCase();
+            } else if (userChoice.contains("LOOKUP ACCOUNT")) {  //works
+                lookupAccount(userChoice);
+                System.out.println(menuOptions);
+                userChoice = scanner.nextLine().toUpperCase();
             } else if (userChoice.contains("CLOSE-WON")) { //did not try yet
                 String closeWonId = userChoice.split(" ")[1];
                 closeOpportunity(closeWonId, Status.CLOSED_WON);
@@ -198,7 +217,8 @@ public class CRM {
     public void convertLead(Scanner scanner, String id){
         Contact newContact = createContact(leadList.get(id));
         Product productType = typeOfProduct(scanner);
-        Opportunity newOpportunity = createOpportunity(productType, newContact);
+        int productQuantity = quantityOfProduct(scanner);
+        Opportunity newOpportunity = createOpportunity(productType,productQuantity, newContact);
         createAccount(scanner, newContact, newOpportunity);
         System.out.println("New Opportunity created:\n" + newOpportunity.toString());
     }
@@ -218,6 +238,11 @@ public class CRM {
             default:
                 return Product.BOX;
         }
+    }
+    public int quantityOfProduct(Scanner scanner) {
+        System.out.println("Enter a quantity for the product:");
+        int quantity = verifyIntInput(scanner, 1, Integer.MAX_VALUE);
+        return quantity;
     }
     public Industry typeOfIndustry(Scanner scanner){
         System.out.println(
@@ -241,8 +266,8 @@ public class CRM {
                 return Industry.OTHER;
         }
     }
-    public Opportunity createOpportunity(Product productType, Contact newContact){
-        Opportunity newOpportunity = new Opportunity(productType, newContact, Status.OPEN);
+    public Opportunity createOpportunity(Product productType, int productQuantity, Contact newContact){
+        Opportunity newOpportunity = new Opportunity(productType, productQuantity, newContact);
         opportunityList.put(newOpportunity.getId(), newOpportunity);
         return newOpportunity;
     }
@@ -260,13 +285,85 @@ public class CRM {
         accountList.put(newAccount.getId(),newAccount);
     }
 
+
+    public void showOpportunities() {
+        try { for (Map.Entry<String, Opportunity> entry : opportunityList.entrySet()) {
+            System.out.println(entry.getValue());
+            }
+        } catch (Exception e) {
+            System.out.println("\n\nNo Opportunities to show\n\n");
+        }
+    }
+
+    public Opportunity lookupOpportunity(String userChoice) {
+        String opportunityId = null;
+        try {
+            opportunityId = userChoice.split(" ")[2];
+        } catch (ArrayIndexOutOfBoundsException e) {
+        }
+        try {
+            System.out.println(opportunityList.get(opportunityId).toString());
+        } catch (NullPointerException e) {
+            System.err.println("Not a valid Opportunity Id.");
+        }
+        return opportunityList.get(opportunityId);
+    }
+
+    public void showContacts() {
+        try { for (Map.Entry<String, Contact> entry : contactList.entrySet()) {
+            System.out.println(entry.getValue());
+        }
+        } catch (Exception e) {
+            System.out.println("\n\nNo Contacts to show\n\n");
+        }
+    }
+
+    public Contact lookupContact(String userChoice) {
+        String contactId = null;
+        try {
+            contactId = userChoice.split(" ")[2];
+        } catch (ArrayIndexOutOfBoundsException e) {
+        }
+        try {
+            System.out.println(contactList.get(contactId).toString());
+        } catch (NullPointerException e) {
+            System.err.println("Not a valid Contact Id.");
+        }
+        return contactList.get(contactId);
+    }
+
+    public Account lookupAccount(String userChoice) {
+        String accountId = null;
+        try {
+            accountId = userChoice.split(" ")[2];
+        } catch (ArrayIndexOutOfBoundsException e) {
+        }
+        try {
+            System.out.println(accountList.get(accountId).toString());
+        } catch (NullPointerException e) {
+            System.err.println("Not a valid Account Id.");
+        }
+        return accountList.get(accountId);
+    }
+
+    public void showAccounts() {
+        try { for (Map.Entry<String, Account> entry : accountList.entrySet()) {
+            System.out.println(entry.getValue());
+        }
+        } catch (Exception e) {
+            System.out.println("\n\nNo Accounts to show\n\n");
+        }
+    }
+
     public void closeOpportunity(String id, Status status){
         if (opportunityList.get(id) == null) {
             throw new IllegalArgumentException("Not a valid Opportunity ID");
         }
         opportunityList.get(id).setStatus(status);
-
+        System.out.println("Status updated\n");
+        System.out.println(opportunityList.get(id));
     }
+
     public static int verifyIntInput(Scanner scanner, int min, int max) {
         boolean flag;
         int num = -1;
@@ -289,5 +386,6 @@ public class CRM {
         } while (flag);
         return num;
     }
+
 
 }
