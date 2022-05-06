@@ -22,4 +22,4 @@ User Diagram
 
 Class Case Diagram
 
-![CRM class case diagram](https://user-images.githubusercontent.com/88110591/167152133-54c6f8d9-2f40-4bd4-923a-14a924c9c23f.png)
+![Screen Shot 2022-05-06 at 4 43 16 PM](https://user-images.githubusercontent.com/88110591/167156240-5a3fdd8e-8a09-446e-a018-6f8daab8e644.png)
