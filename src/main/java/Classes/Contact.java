@@ -13,7 +13,7 @@ public class Contact {
 
 
     public Contact(String name, int phoneNumber, String email){
-        id = createID();
+        this.id = createID();
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;

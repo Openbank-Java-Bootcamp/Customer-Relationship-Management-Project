@@ -3,6 +3,7 @@ package Classes;
 import Enums.Industry;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Account {
@@ -11,8 +12,8 @@ public class Account {
     private int employeeCount;
     private String city;
     private String country;
-    private List<Contact> contactList;
-    private List<Opportunity> opportunityList;
+    private Map<String, Contact> contactList;
+    private Map<String, Opportunity> opportunityList;
     private static AtomicInteger accountIdCounter = new AtomicInteger();
     // Should Account have Lead's company name and be added to constructor?
 
@@ -20,8 +21,8 @@ public class Account {
 
 
     //CONSTRUCTOR
-    public Account(Industry industry, int employeeCount, String city, String country, List<Contact> contactList, List<Opportunity> opportunityList) {
-        id = createID();
+    public Account(Industry industry, int employeeCount, String city, String country, Map<String,Contact> contactList, Map<String, Opportunity> opportunityList) {
+        this.id = createID();
         this.industry = industry;
         this.employeeCount = employeeCount;
         this.city = city;
@@ -49,11 +50,11 @@ public class Account {
         this.country = country;
     }
 
-    public void setContactList(List<Contact> contactList) {
+    public void setContactList(Map<String, Contact> contactList) {
         this.contactList = contactList;
     }
 
-    public void setOpportunityList(List<Opportunity> opportunityList) {
+    public void setOpportunityList(Map<String, Opportunity> opportunityList) {
         this.opportunityList = opportunityList;
     }
 
@@ -81,11 +82,11 @@ public class Account {
         return country;
     }
 
-    public List<Contact> getContactList() {
+    public Map<String, Contact> getContactList() {
         return contactList;
     }
 
-    public List<Opportunity> getOpportunityList() {
+    public Map<String, Opportunity> getOpportunityList() {
         return opportunityList;
     }
 

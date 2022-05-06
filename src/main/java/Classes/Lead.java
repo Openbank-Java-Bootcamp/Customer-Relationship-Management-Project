@@ -18,7 +18,7 @@ public class Lead {
 
     //CONSTRUCTOR
     public Lead(String name, int phoneNumber, String email, String companyName) {
-        id = createId();
+        this.id = createId();
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
